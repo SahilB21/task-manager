@@ -1,6 +1,7 @@
 {
   "projects": {
-    "myproject": "upahead-assignment"
+    "myproject": "upahead-assignment",
+    "default": "upahead-assignment"
   },
   "targets": {},
   "etags": {}
