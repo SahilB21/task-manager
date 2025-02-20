@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc} from 'firebase/firestore';
 import { db } from '../firebase';
 
-// Function to generate a motivational message via OpenAI API
 async function generateAIMotivation(taskText) {
     const OPENAI_API_KEY = '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'; // Replace with your valid API key
     const endpoint = "https://api.openai.com/v1/chat/completions";
     
-    // Build the messages array. A system message can help set the context.
     const messages = [
       { role: "system", content: "You are a helpful assistant that provides motivational messages." },
       { role: "user", content: `Give a motivational message or fun fact related to the following task: "${taskText}"` }
@@ -53,23 +51,20 @@ function TaskItem({ task }) {
   const [loading, setLoading] = useState(false);
 
   const handleComplete = async () => {
-    if (task.completed) return; // Prevent duplicate completions
+    if (task.completed) return;
 
     try {
-      // Update task status in Firestore
       const taskRef = doc(db, 'tasks', task.id);
       await updateDoc(taskRef, {
         completed: true
       });
       console.log("Task marked as complete in Firestore:", task.id);
 
-      // Call OpenAI API for a motivational message
       setLoading(true);
       const aiMessage = await generateAIMotivation(task.text);
       console.log("Received AI message:", aiMessage);
       setLoading(false);
       
-      // Display the message if it exists
       if (aiMessage) {
         alert(aiMessage);
       } else {
@@ -80,12 +75,34 @@ function TaskItem({ task }) {
     }
   };
 
+  const handleRemove = async () => {
+    if (!window.confirm(`Are you sure you want to remove "${task.text}"?`)) {
+      return;
+    }
+
+    try {
+      const taskRef = doc(db, 'tasks', task.id);
+      await deleteDoc(taskRef);
+      alert("Task removed!");
+    } catch (error) {
+      console.error("Error removing task:", error);
+    }
+  };
+
   return (
     <div className={`task-item ${task.completed ? 'completed' : ''}`}>
       <span>{task.text}</span>
-      <button onClick={handleComplete} disabled={task.completed || loading}>
-        {task.completed ? "Completed" : loading ? "Loading..." : "Mark Complete"}
-      </button>
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <button
+          onClick={handleComplete}
+          disabled={task.completed || loading}
+        >
+          {task.completed ? "Completed" : loading ? "Loading..." : "Mark Complete"}
+        </button>
+        <button onClick={handleRemove} style={{ backgroundColor: '#dc3545' }}>
+          Remove
+        </button>
+      </div>
     </div>
   );
 }
