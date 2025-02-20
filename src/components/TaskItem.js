@@ -3,49 +3,20 @@ import { doc, updateDoc, deleteDoc} from 'firebase/firestore';
 import { db } from '../firebase';
 
 async function generateAIMotivation(taskText) {
-    const OPENAI_API_KEY = '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'; // Replace with your valid API key
-    const endpoint = "https://api.openai.com/v1/chat/completions";
-    
-    const messages = [
-      { role: "system", content: "You are a helpful assistant that provides motivational messages." },
-      { role: "user", content: `Give a motivational message or fun fact related to the following task: "${taskText}"` }
-    ];
-    
     try {
-      console.log("Sending request to OpenAI with messages:", messages);
-      const response = await fetch(endpoint, {
+      const response = await fetch("https://us-central1-upahead-assignment.cloudfunctions.net/getMotivation", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages,
-          max_tokens: 50,
-          temperature: 0.7
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskText })
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API Error:", errorData);
-        return "Great job!";
-      }
-      
       const data = await response.json();
-      console.log("OpenAI API Response:", data);
-      if (data.choices && data.choices.length > 0 && data.choices[0].message) {
-        return data.choices[0].message.content.trim();
-      } else {
-        console.warn("No valid message found in API response.");
-        return "Great job!";
-      }
+      console.log("Client received:", data);
+      return data.message || "Great job!";
     } catch (error) {
-      console.error("Error fetching AI message:", error);
+      console.error("Error calling Cloud Function:", error);
       return "Great job!";
     }
-  }  
+  }
 
 function TaskItem({ task }) {
   const [loading, setLoading] = useState(false);
