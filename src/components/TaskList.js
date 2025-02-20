@@ -24,11 +24,11 @@ function TaskList({ user }) {
   }, [user.uid]);
 
   return (
-    <div>
+    <div className="task-list">
       {tasks.length > 0 ? (
         tasks.map((task) => <TaskItem key={task.id} task={task} />)
       ) : (
-        <p>No tasks yet.</p>
+        <p style={{ textAlign: 'center' }}>No tasks yet.</p>
       )}
     </div>
   );

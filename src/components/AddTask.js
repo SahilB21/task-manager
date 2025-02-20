@@ -23,17 +23,14 @@ function AddTask({ user }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+    <form onSubmit={handleSubmit} className="add-task-form">
       <input
         type="text"
         placeholder="Enter new task"
         value={task}
         onChange={(e) => setTask(e.target.value)}
-        style={{ padding: '10px', width: '70%' }}
       />
-      <button type="submit" style={{ padding: '10px', marginLeft: '10px' }}>
-        Add Task
-      </button>
+      <button type="submit" style={{ marginLeft: '10px' }}>Add Task</button>
     </form>
   );
 }

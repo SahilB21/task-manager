@@ -20,10 +20,10 @@ function Auth({ user }) {
   };
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div className="auth-section" style={{ marginBottom: '20px', textAlign: 'center' }}>
       {user ? (
         <>
-          <p>Signed in as {user.displayName}</p>
+          <p>Signed in as <strong>{user.displayName}</strong></p>
           <button onClick={handleSignOut}>Sign Out</button>
         </>
       ) : (

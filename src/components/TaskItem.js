@@ -54,19 +54,8 @@ function TaskItem({ task }) {
   };
 
   return (
-    <div
-      style={{
-        padding: '10px',
-        marginBottom: '10px',
-        backgroundColor: task.completed ? '#d3ffd3' : '#f0f0f0',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}
-    >
-      <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
-        {task.text}
-      </span>
+    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
+      <span>{task.text}</span>
       <button onClick={handleComplete} disabled={task.completed || loading}>
         {task.completed ? "Completed" : loading ? "Loading..." : "Mark Complete"}
       </button>

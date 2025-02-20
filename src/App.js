@@ -4,6 +4,7 @@ import { auth } from './firebase';
 import Auth from './components/Auth';
 import AddTask from './components/AddTask';
 import TaskList from './components/TaskList';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -16,8 +17,10 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Task Manager</h1>
+    <div className="container">
+      <header>
+        <h1>Task Manager</h1>
+      </header>
       <Auth user={user} />
       {user ? (
         <>
@@ -25,7 +28,7 @@ function App() {
           <TaskList user={user} />
         </>
       ) : (
-        <p>Please sign in to manage your tasks.</p>
+        <p style={{ textAlign: 'center' }}>Please sign in to manage your tasks.</p>
       )}
     </div>
   );
